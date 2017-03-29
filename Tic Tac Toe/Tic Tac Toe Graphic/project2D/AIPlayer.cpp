@@ -121,12 +121,12 @@ MinimaxOption AIPlayer::Minimax(const board & theBoard, int depth, int valueToBe
 			}
 			optionList[n] = temp;
 			++optionCount;
-			if (n == 0) {														// If this is new best move
-				if (ReverseMinimaxValue(optionList[0].value) < valueToBeat) {	// If best move, on being returned, will be a worse move than the best move of parent
-					pruneSubtrees = true;										// Stop considering moves, as other player wouldn't let this happen
-					break;
-				}
-			}
+			//if (n == 0) {														// If this is new best move
+			//	if (ReverseMinimaxValue(optionList[0].value) < valueToBeat) {	// If best move, on being returned, will be a worse move than the best move of parent
+			//		pruneSubtrees = true;										// Stop considering moves, as other player wouldn't let this happen
+			//		break;
+			//	}
+			//}
 		}
 		}
 		if (pruneSubtrees) {
@@ -135,10 +135,14 @@ MinimaxOption AIPlayer::Minimax(const board & theBoard, int depth, int valueToBe
 	}
 	// Figure out how many moves are equal best
 	int width = 1;
-	while (width < BOARD_SIZE*BOARD_SIZE && optionList[0].value == optionList[width].value){//&&optionList[0].width == optionList[width].width) { //TODO overload == for MinimaxOption instead
-		width++;
+	int equivalentOptions = 1;
+	while (width < BOARD_SIZE*BOARD_SIZE && optionList[0].value == optionList[width].value){
+		if (optionList[0].width == optionList[width].width) {
+			++equivalentOptions;
+		}
+		++width;
 	}
-	bestMove = optionList[rand() % width];	//Choose random option from among the best
+	bestMove = optionList[rand() % equivalentOptions];	//Choose random option from among the best
 	bestMove.width = width;	
 	delete[] optionList;
 	return bestMove;
