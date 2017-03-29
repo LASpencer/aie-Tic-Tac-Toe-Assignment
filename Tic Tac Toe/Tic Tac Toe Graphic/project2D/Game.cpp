@@ -59,13 +59,11 @@ void Game::TakeTurn(char mark)
 		theMove = activePlayer->GetMove(m_gameBoard);		
 		legalMove = IsMoveLegal(theMove, mark, m_gameBoard);
 		if (!legalMove) {
-			activePlayer->WarnIllegal(theMove);
+			// TODO throw exception?
 		}
 	}
 	m_gameBoard[theMove.row][theMove.col] = mark;			// Put mark on the game board
-	if (HasWon(mark, m_gameBoard)) {						// Check if active player won and inform both players if so
-		activePlayer->GameResult(Player::RESULT_WIN);
-		passivePlayer->GameResult(Player::RESULT_LOSS);
+	if (HasWon(mark, m_gameBoard)) {						// Check if active player won
 		if (mark == 'x') {
 			m_gameStatus = STATUS_X_WIN;
 		} else{
@@ -73,9 +71,7 @@ void Game::TakeTurn(char mark)
 		}
 		m_gameOver = true;
 	}
-	else if (IsFull(m_gameBoard)) {						// Check if board is full and inform both players if so
-		activePlayer->GameResult(Player::RESULT_DRAW);
-		passivePlayer->GameResult(Player::RESULT_DRAW);
+	else if (IsFull(m_gameBoard)) {						// Check if board is full
 		m_gameStatus = STATUS_DRAW;
 		m_gameOver = true;
 	}

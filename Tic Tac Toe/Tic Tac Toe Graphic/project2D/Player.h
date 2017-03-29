@@ -14,14 +14,8 @@ public:
 
 	// Decide what move to make based on board given
 	virtual Move GetMove(const board &theBoard) = 0;
-	virtual void GameResult(char result) =0;
-	// Alert player their move was illegal
-	virtual void WarnIllegal(Move move) = 0;
 	void setGameController(GameController *gameController); //TODO should probably be in constructor
 
-	static const char RESULT_WIN = 'w';
-	static const char RESULT_LOSS = 'l';
-	static const char RESULT_DRAW = 'd';
 
 	/*	Player type codes
 		h = human, other types indicate different AI algorithms/difficulties

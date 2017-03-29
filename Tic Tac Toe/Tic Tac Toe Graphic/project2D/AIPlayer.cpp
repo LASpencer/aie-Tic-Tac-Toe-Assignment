@@ -70,14 +70,6 @@ Move AIPlayer::GetMove(const board &theBoard) {
 	return moveChoice.move;
 }
 
-void AIPlayer::WarnIllegal(Move move)
-{
-}
-
-void AIPlayer::GameResult(char result)
-{
-}
-
 MinimaxOption AIPlayer::Minimax(const board & theBoard, int depth, int valueToBeat ) 
 {
 	MinimaxOption *optionList = new MinimaxOption[BOARD_SIZE*BOARD_SIZE];	//Holds all possible options
@@ -121,12 +113,12 @@ MinimaxOption AIPlayer::Minimax(const board & theBoard, int depth, int valueToBe
 			}
 			optionList[n] = temp;
 			++optionCount;
-			//if (n == 0) {														// If this is new best move
-			//	if (ReverseMinimaxValue(optionList[0].value) < valueToBeat) {	// If best move, on being returned, will be a worse move than the best move of parent
-			//		pruneSubtrees = true;										// Stop considering moves, as other player wouldn't let this happen
-			//		break;
-			//	}
-			//}
+			if (n == 0) {														// If this is new best move
+				if (ReverseMinimaxValue(optionList[0].value) < valueToBeat) {	// If best move, on being returned, will be a worse move than the best move of parent
+					pruneSubtrees = true;										// Stop considering moves, as other player wouldn't let this happen
+					break;
+				}
+			}
 		}
 		}
 		if (pruneSubtrees) {

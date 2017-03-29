@@ -10,9 +10,6 @@ Player::~Player()
 {
 }
 
-void Player::GameResult(char result)
-{
-}
 
 void Player::setGameController(GameController * gameController)
 {
