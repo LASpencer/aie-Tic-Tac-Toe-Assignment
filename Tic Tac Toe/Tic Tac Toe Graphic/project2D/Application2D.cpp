@@ -20,24 +20,17 @@ bool Application2D::startup() {
 
 	m_gc = new GameController(Player::PLAYER_HUMAN, Player::PLAYER_MINIMAX_EASY);
 
-
-	m_cameraX = 0;
-	m_cameraY = 0;
-	m_timer = 0;
-
 	return true;
 }
 
 void Application2D::shutdown() {
 	
-	//delete m_font;
 	delete m_gc;
+	delete m_2dRenderer;
 
 }
 
 void Application2D::update(float deltaTime) {
-
-	m_timer += deltaTime;
 
 	// get input
 	aie::Input* input = aie::Input::getInstance();
@@ -57,7 +50,7 @@ void Application2D::draw() {
 	clearScreen();
 
 	// set the camera position before we begin rendering
-	m_2dRenderer->setCameraPos(m_cameraX, m_cameraY);
+	m_2dRenderer->setCameraPos(0.0f,0.0f);
 
 	// begin drawing sprites
 	m_2dRenderer->begin();
