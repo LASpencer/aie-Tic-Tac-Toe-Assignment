@@ -80,16 +80,16 @@ MinimaxOption AIPlayer::Minimax(const board & theBoard, int depth, int valueToBe
 	int optionCount = 0;
 	int value;
 	bool pruneSubtrees = false;
-	char mark = Game::CurrentTurn(theBoard);
+	char mark = Game::findCurrentTurn(theBoard);
 	for (unsigned int i = 0; i < BOARD_SIZE; i++) {
 		for (unsigned int j = 0; j < BOARD_SIZE; j++) {
-			if (Game::IsMoveLegal({ i,j }, mark, theBoard)) {		// First check if move is legal
+			if (Game::isMoveLegal({ i,j }, mark, theBoard)) {		// First check if move is legal
 				Game::copyBoard(testBoard, theBoard);				// Set up testBoard
 				testBoard[i][j] = mark;								// Put move on testBoard
-				if (Game::HasWon(mark, testBoard)) {
+				if (Game::hasWon(mark, testBoard)) {
 					temp = { { i,j },MINIMAX_WIN_VALUE,1 };			// If winning move, add to list with value 10
 				}
-				else if (Game::IsFull(testBoard)) {
+				else if (Game::isFull(testBoard)) {
 					temp = { { i,j },0,1 };							// If draw, add to list with value 0
 				}
 				else if (depth <= 0) {
@@ -144,7 +144,7 @@ int AIPlayer::ReverseMinimaxValue(int value) {
 	int reverseValue;
 	
 	if (value == 0) {
-		reverseValue = 0;				// Draw is worth the same to both players
+		reverseValue = 0;				// draw is worth the same to both players
 	}
 	else if (value < 0) {				// Decrease absolute value by 1, and reverse sign
 		reverseValue = -(1 + value);

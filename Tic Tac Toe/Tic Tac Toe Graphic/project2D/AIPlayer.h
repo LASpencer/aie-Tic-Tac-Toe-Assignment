@@ -1,5 +1,13 @@
 #pragma once
 #include "Player.h"
+
+struct MinimaxOption {
+	Move move;
+	int value;
+	// how many options of same value and depth this was selected from
+	size_t width;
+};
+
 class AIPlayer :
 	public Player
 {

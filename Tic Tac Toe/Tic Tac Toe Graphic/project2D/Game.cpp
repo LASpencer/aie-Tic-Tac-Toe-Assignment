@@ -7,7 +7,7 @@
 Game::Game(GameController *gc)
 {
 	// initialize empty board
-	Initialize();
+	initialize();
 	m_gc = gc;
 }
 
@@ -17,7 +17,7 @@ Game::~Game()
 }
 
 // Empties board and sets gameOver to false
-void Game::Initialize()
+void Game::initialize()
 {
 	for (int i = 0; i < BOARD_SIZE; i++) {
 		for (int j = 0; j < BOARD_SIZE; j++) {
@@ -28,15 +28,15 @@ void Game::Initialize()
 	m_gameStatus = STATUS_PLAYING;
 }
 
-void Game::TakeTurn() {
+void Game::takeTurn() {
 
-	char currentTurn = CurrentTurn(m_gameBoard);
-	if (currentTurn == 'x' || currentTurn == 'o') {
-		TakeTurn(currentTurn);
+	char mark = findCurrentTurn(m_gameBoard);
+	if (mark == 'x' || mark == 'o') {
+		takeTurn(mark);
 	}
 }
 
-void Game::TakeTurn(char mark) 
+void Game::takeTurn(char mark) 
 {
 	Move theMove;
 	bool legalMove = false;
@@ -57,13 +57,13 @@ void Game::TakeTurn(char mark)
 	}
 	while (!legalMove) {								// Ask for move from player until legal
 		theMove = activePlayer->GetMove(m_gameBoard);		
-		legalMove = IsMoveLegal(theMove, mark, m_gameBoard);
+		legalMove = isMoveLegal(theMove, mark, m_gameBoard);
 		if (!legalMove) {
 			// TODO throw exception?
 		}
 	}
 	m_gameBoard[theMove.row][theMove.col] = mark;			// Put mark on the game board
-	if (HasWon(mark, m_gameBoard)) {						// Check if active player won
+	if (hasWon(mark, m_gameBoard)) {						// Check if active player won
 		if (mark == 'x') {
 			m_gameStatus = STATUS_X_WIN;
 		} else{
@@ -71,14 +71,14 @@ void Game::TakeTurn(char mark)
 		}
 		m_gameOver = true;
 	}
-	else if (IsFull(m_gameBoard)) {						// Check if board is full
+	else if (isFull(m_gameBoard)) {						// Check if board is full
 		m_gameStatus = STATUS_DRAW;
 		m_gameOver = true;
 	}
 }
 
 // determines if selected mark has a line of 3
-bool Game::HasWon(char mark, board theBoard)
+bool Game::hasWon(char mark, board theBoard)
 {
 	bool row = false;
 	bool col = false;
@@ -131,7 +131,7 @@ bool Game::HasWon(char mark, board theBoard)
 }
 
 // Returns true if all spaces on board are marked 
-bool Game::IsFull(board theBoard)
+bool Game::isFull(board theBoard)
 {
 	bool full = true;
 	for (int i = 0; i < BOARD_SIZE; i++) {
@@ -151,7 +151,7 @@ bool Game::IsFull(board theBoard)
 /*	counts x and o marks on board
 returns x if values equal, o if one more x, or error code if board isn't suitable
 */
-char Game::CurrentTurn(const board &theBoard)
+char Game::findCurrentTurn(const board &theBoard)
 {
 	int xCount = 0;
 	int oCount = 0;
@@ -183,14 +183,12 @@ char Game::CurrentTurn(const board &theBoard)
 
 char Game::getCurrentTurn()
 {
-	return CurrentTurn(m_gameBoard);
+	return findCurrentTurn(m_gameBoard);
 }
 
 
 
-// determines if a move can be legally made
-// true if row and col within bounds, no other move made at location, and mark fits turn order
-bool Game::IsMoveLegal(Move theMove, char mark,const board &theBoard) {
+bool Game::isMoveLegal(Move theMove, char mark,const board &theBoard) {
 	bool legal = true;
 	char currentTurn;	// mark of whoever's turn it should be
 	int xCount = 0;
@@ -204,7 +202,7 @@ bool Game::IsMoveLegal(Move theMove, char mark,const board &theBoard) {
 		legal = false;
 	}
 	else {													// Check which player should be playing
-		currentTurn = CurrentTurn(theBoard);
+		currentTurn = findCurrentTurn(theBoard);
 		if (currentTurn != mark) {						// Either played out of turn, or an error code
 			legal = false;
 			if (currentTurn == ERROR_ILLEGAL_BOARD) {
@@ -228,7 +226,7 @@ void Game::copyBoard(board target, const board &source) {
 	}
 }
 
-bool Game::IsGameOver()
+bool Game::isGameOver()
 {
 	return m_gameOver;
 }

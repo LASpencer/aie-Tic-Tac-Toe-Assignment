@@ -124,24 +124,24 @@ Player * GameController::getPlayer(char mark)
 	return chosenPlayer;
 }
 
-void GameController::Update(float deltaTime)
+void GameController::update(float deltaTime)
 {
 	aie::Input* input = aie::Input::getInstance();
 
 	if (m_inGame) {
-		if (m_game->IsGameOver()) {
-			m_playGameOverButton->Update(deltaTime);
-			m_menuGameOverButton->Update(deltaTime);
-			m_quitGameOverButton->Update(deltaTime);
+		if (m_game->isGameOver()) {
+			m_playGameOverButton->update(deltaTime);
+			m_menuGameOverButton->update(deltaTime);
+			m_quitGameOverButton->update(deltaTime);
 			// check for replay or quit button clicks
 			if (input->wasMouseButtonPressed(aie::INPUT_MOUSE_BUTTON_LEFT)) {
-				if (m_playGameOverButton->WasClicked()) {
-					m_game->Initialize();
+				if (m_playGameOverButton->wasClicked()) {
+					m_game->initialize();
 				}
-				else if(m_menuGameOverButton->WasClicked()) {
+				else if(m_menuGameOverButton->wasClicked()) {
 					m_inGame = false;
 				}
-				else if (m_quitGameOverButton->WasClicked()) {
+				else if (m_quitGameOverButton->wasClicked()) {
 					m_running = false;
 				}
 			}
@@ -159,10 +159,10 @@ void GameController::Update(float deltaTime)
 			}
 			// If human player's turn
 			if (playerType == Player::PLAYER_HUMAN) {
-				// Update board buttons
+				// update board buttons
 				for (int i = 0; i < BOARD_SIZE; ++i) {
 					for (int j = 0; j < BOARD_SIZE; ++j) {
-						m_boardButton[i][j]->Update(deltaTime);
+						m_boardButton[i][j]->update(deltaTime);
 					}
 				}
 				// Remove illegal move warning after time
@@ -170,7 +170,7 @@ void GameController::Update(float deltaTime)
 				if (m_warningTimer > 0.2) {
 					for (int i = 0; i < BOARD_SIZE; ++i) {
 						for (int j = 0; j < BOARD_SIZE; ++j) {
-							if (m_boardButton[i][j]->IsPressed()) {
+							if (m_boardButton[i][j]->isPressed()) {
 								m_boardButton[i][j]->setPressed(false);
 							}
 						}
@@ -184,12 +184,12 @@ void GameController::Update(float deltaTime)
 					bool buttonClicked = false;
 					for (int i = 0; i < BOARD_SIZE && !buttonClicked; ++i) {
 						for (int j = 0; j < BOARD_SIZE &&!buttonClicked; ++j) {
-							if (m_boardButton[i][j]->WasClicked()) {
+							if (m_boardButton[i][j]->wasClicked()) {
 								buttonClicked = true;
 								Move playerMove = { i, j };
-								if (m_game->IsMoveLegal(playerMove, mark, gameBoard)) {
+								if (m_game->isMoveLegal(playerMove, mark, gameBoard)) {
 									m_move = playerMove;
-									m_game->TakeTurn();
+									m_game->takeTurn();
 								} else{
 									// Illegal move flashes red
 									m_warningTimer = 0;
@@ -208,19 +208,19 @@ void GameController::Update(float deltaTime)
 				if (m_turnTimer > 0.5) {
 					// Take turn
 					m_turnTimer = 0;
-					m_game->TakeTurn();
+					m_game->takeTurn();
 				}
 			}
 		}
 	}
 	else {// In main menu
-		//Update Buttons
+		//update Buttons
 		for (int i = 0; i < 4; i++) {
-			m_xPlayerMenuButton[i]->Update(deltaTime);
-			m_oPlayerMenuButton[i]->Update(deltaTime);
+			m_xPlayerMenuButton[i]->update(deltaTime);
+			m_oPlayerMenuButton[i]->update(deltaTime);
 		}
-		m_playButton->Update(deltaTime);
-		m_quitButton->Update(deltaTime);
+		m_playButton->update(deltaTime);
+		m_quitButton->update(deltaTime);
 
 		// Check for button clicks
 		if (input->wasMouseButtonPressed(aie::INPUT_MOUSE_BUTTON_LEFT)) {
@@ -228,10 +228,10 @@ void GameController::Update(float deltaTime)
 
 			// Check if xPlayerType buttons clicked
 			for (int i = 0; i < 4; i++) {
-				if (m_xPlayerMenuButton[i]->WasClicked()) {
+				if (m_xPlayerMenuButton[i]->wasClicked()) {
 					buttonClicked = true;
 					// Check button wasn't already clicked
-					if (!m_xPlayerMenuButton[i]->IsPressed()) {
+					if (!m_xPlayerMenuButton[i]->isPressed()) {
 						// Change xPlayer to new type
 						switch (i) {
 						case 0:
@@ -250,7 +250,7 @@ void GameController::Update(float deltaTime)
 
 						// Unset previously pressed button
 						for (int n = 0; n < 4; n++) {
-							if (m_xPlayerMenuButton[n]->IsPressed()) {
+							if (m_xPlayerMenuButton[n]->isPressed()) {
 								m_xPlayerMenuButton[n]->setPressed(false);
 							}
 						}
@@ -265,10 +265,10 @@ void GameController::Update(float deltaTime)
 			//Check if oPlayerType buttons clicked
 			if (!buttonClicked) {
 				for (int i = 0; i < 4; i++) {
-					if (m_oPlayerMenuButton[i]->WasClicked()) {
+					if (m_oPlayerMenuButton[i]->wasClicked()) {
 						buttonClicked = true;
 						// Check button wasn't already clicked
-						if (!m_oPlayerMenuButton[i]->IsPressed()) {
+						if (!m_oPlayerMenuButton[i]->isPressed()) {
 							// Change xPlayer to new type
 							switch (i) {
 							case 0:
@@ -287,7 +287,7 @@ void GameController::Update(float deltaTime)
 
 							// Unset previously pressed button
 							for (int n = 0; n < 4; n++) {
-								if (m_oPlayerMenuButton[n]->IsPressed()) {
+								if (m_oPlayerMenuButton[n]->isPressed()) {
 									m_oPlayerMenuButton[n]->setPressed(false);
 								}
 							}
@@ -303,14 +303,14 @@ void GameController::Update(float deltaTime)
 
 			// Check if play button clicked
 			if (!buttonClicked) {
-				if (m_playButton->WasClicked()) {
-					m_game->Initialize();
+				if (m_playButton->wasClicked()) {
+					m_game->initialize();
 					m_inGame = true;
 					buttonClicked = true;
 				}
 			}
 			if (!buttonClicked) {
-				if (m_quitButton->WasClicked()) {
+				if (m_quitButton->wasClicked()) {
 					m_running = false;
 				}
 			}
@@ -319,14 +319,14 @@ void GameController::Update(float deltaTime)
 
 }
 
-void GameController::Draw(aie::Renderer2D &renderer)
+void GameController::draw(aie::Renderer2D &renderer)
 {
-	//Draw backround
+	//draw backround
 	renderer.setRenderColour(BACKGROUND_COLOUR);
 	renderer.drawBox(480, 360, 960, 720);
 	if (m_inGame) {
 		displayBoard(renderer);
-		if (m_game->IsGameOver()) {
+		if (m_game->isGameOver()) {
 			displayGameOver(renderer);
 		}
 	} else{
@@ -346,14 +346,14 @@ void GameController::displayBoard(aie::Renderer2D &renderer)
 	// draw the board
 	for (int i = 0; i < BOARD_SIZE; i++) {
 		for (int j = 0; j < BOARD_SIZE; j++) {
-			m_boardButton[i][j]->Draw(renderer);
+			m_boardButton[i][j]->draw(renderer);
 			//draw mark
 			float markThickness = MARK_THICKNESS;
 			float margin = MARK_MARGIN;
-			float markPosX = m_boardButton[i][j]->GetPosX();
-			float markPosY = m_boardButton[i][j]->GetPosY();
-			float markWidth = (m_boardButton[i][j]->GetWidth() - 2*margin);
-			float markHeight = (m_boardButton[i][j]->GetHeight() - 2*margin);
+			float markPosX = m_boardButton[i][j]->getPosX();
+			float markPosY = m_boardButton[i][j]->getPosY();
+			float markWidth = (m_boardButton[i][j]->getWidth() - 2*margin);
+			float markHeight = (m_boardButton[i][j]->getHeight() - 2*margin);
 			
 			unsigned int markColour = MARK_COLOUR;
 			switch (display[i][j]) {
@@ -365,7 +365,7 @@ void GameController::displayBoard(aie::Renderer2D &renderer)
 			case 'o':
 				renderer.setRenderColour(markColour);
 				renderer.drawCircle(markPosX, markPosY, (markWidth / 2));
-				renderer.setRenderColour(m_boardButton[i][j]->GetColour());
+				renderer.setRenderColour(m_boardButton[i][j]->getColour());
 				renderer.drawCircle(markPosX, markPosY, (markWidth / 2) - markThickness);
 				break;
 			default:
@@ -399,7 +399,7 @@ void GameController::displayBoard(aie::Renderer2D &renderer)
 		strcpy_s(turnMessage, "O Wins");
 		break;
 	case Game::STATUS_DRAW:
-		strcpy_s(turnMessage, "Draw");
+		strcpy_s(turnMessage, "draw");
 		break;
 	default:
 		strcpy_s(turnMessage, "");
@@ -415,35 +415,35 @@ void GameController::displayGameOver(aie::Renderer2D &renderer)
 {
 	char result = m_game->getGameStatus();
 	if (result != Game::STATUS_DRAW) {
-		// Draw winning line
+		// draw winning line
 		Move winningLine[2];
 		m_game->getWinningLine(winningLine);
 		renderer.setRenderColour(WIN_LINE_COLOUR);
-		float winLineStartX = m_boardButton[winningLine[0].row][winningLine[0].col]->GetPosX();
-		float winLineStartY = m_boardButton[winningLine[0].row][winningLine[0].col]->GetPosY();
-		float winLineEndX = m_boardButton[winningLine[1].row][winningLine[1].col]->GetPosX();
-		float winLineEndY = m_boardButton[winningLine[1].row][winningLine[1].col]->GetPosY();
+		float winLineStartX = m_boardButton[winningLine[0].row][winningLine[0].col]->getPosX();
+		float winLineStartY = m_boardButton[winningLine[0].row][winningLine[0].col]->getPosY();
+		float winLineEndX = m_boardButton[winningLine[1].row][winningLine[1].col]->getPosX();
+		float winLineEndY = m_boardButton[winningLine[1].row][winningLine[1].col]->getPosY();
 		float winLineThickness = 10;
 		renderer.drawLine(winLineStartX,winLineStartY,winLineEndX,winLineEndY,winLineThickness);
 	}
-	// Draw game over message and quit/replay/menu buttons
-	m_playGameOverButton->Draw(renderer);
-	m_menuGameOverButton->Draw(renderer);
-	m_quitGameOverButton->Draw(renderer);
+	// draw game over message and quit/replay/menu buttons
+	m_playGameOverButton->draw(renderer);
+	m_menuGameOverButton->draw(renderer);
+	m_quitGameOverButton->draw(renderer);
 }
 
 void GameController::displayMainMenu(aie::Renderer2D & renderer)
 {
-	// Draw title image
+	// draw title image
 	renderer.setRenderColour(0xFFFFFFFF);
 	renderer.drawSprite(m_menuTitle, 480, 396, 960,648);
-	// Draw buttons
+	// draw buttons
 	for (int i = 0; i < 4; i++) {
-		m_xPlayerMenuButton[i]->Draw(renderer);
-		m_oPlayerMenuButton[i]->Draw(renderer);
+		m_xPlayerMenuButton[i]->draw(renderer);
+		m_oPlayerMenuButton[i]->draw(renderer);
 	}
-	m_playButton->Draw(renderer);
-	m_quitButton->Draw(renderer);
+	m_playButton->draw(renderer);
+	m_quitButton->draw(renderer);
 }
 
 void GameController::WarnIllegal(Move move)

@@ -2,6 +2,10 @@
 #include "Renderer2D.h"
 #include "Font.h"
 
+/*Button Class
+Buttons are coloured rectangles containing text. They are drawn on the screen
+and check if they have been moused over or clicked on.
+*/
 class Button
 {
 public:
@@ -14,6 +18,9 @@ public:
 	// Sets width and height of button
 	void setDimensions(float width, float height);
 
+	/* Copies string to m_text
+		text = null terminated string up to 16 characters long (including terminator)
+	*/
 	void setText(const char* text);
 
 	// Sets colour of button (as hexadecimal RGB code)
@@ -25,40 +32,49 @@ public:
 	// Sets pressed colour of button (as hexadecimal RGB code)
 	void setPressedColour(unsigned int colour);
 
+	// Sets button as being pressed, changing its appearance
 	void setPressed(bool pressed);
 
 	// Returns true if posX and posY are inside the button's area
-	bool InButton(float posX, float posY);
+	bool inButton(float posX, float posY);
 
-	bool IsPressed() {
+	bool isPressed() {
 		return m_pressed;
 	}
 
-	bool DoesMouseHover() {
+	// Returns true if mouse position was in the button when last updated
+	bool doesMouseHover() {
 		return m_hover;
 	}
 
-	bool WasClicked() {
+	// Returns true if button was clicked on when last updated
+	bool wasClicked() {
 		return m_clicked;
 	}
 
-	float GetPosX() {
+	float getPosX() {
 		return m_posX;
 	}
-	float GetPosY() {
+	float getPosY() {
 		return m_posY;
 	}
-	float GetWidth() {
+	float getWidth() {
 		return m_width;
 	}
-	float GetHeight() {
+	float getHeight() {
 		return m_height;
 	}
-	unsigned int GetColour();
 
-	void Draw(aie::Renderer2D &renderer);
+	/* Returns colour button is drawn as, based on its current state
+	Colour is passed as an unsigned 4 byte integer, representing an RGBA colour value
+	*/
+	unsigned int getColour();
 
-	void Update(float deltaTime);
+	// Draws coloured rectangle with text written on it
+	void draw(aie::Renderer2D &renderer);
+
+	// Checks if mouse is on the button, and if so whether it was clicked
+	void update(float deltaTime);
 
 protected:
 	float m_posX;
@@ -66,12 +82,12 @@ protected:
 	float m_width;
 	float m_height;
 
-	unsigned int m_colour;
-	unsigned int m_pressedColour;
-	unsigned int m_hoverColour;
+	unsigned int m_colour;					// Default button colour
+	unsigned int m_pressedColour;			// Button colour if set as pressed
+	unsigned int m_hoverColour;				// Button colour when mouse is over button
 	unsigned int m_textColour;
 
-	char m_text[16];
+	char m_text[16];						// Text to be written on button
 
 	aie::Font m_font;
 

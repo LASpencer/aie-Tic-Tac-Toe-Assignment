@@ -25,6 +25,7 @@ Quit button, to end the program.
 
 II. Design
 ----------
+To be consistent with Bootstrap, methods are written in lower camel case where possible.
 
 The program is composed of the following classes:
 
@@ -46,14 +47,32 @@ Each update m_gc's update method is called. Then, if the escape key was
 pressed, or m_gc's m_running flag is set to false, Application2D quits.
 Similarly its draw method simply clears the screen and calls m_gc's draw method (passing
 a pointer to m_2dRenderer).
-The class mainly exists so that code from the earlier console version of the program 
+The class exists so that code from the earlier console version of the program 
 could be more easily reused. Rather than completely rewriting GameController as a subclass 
 of Application, or rewriting the other objects which contain pointers to GameController 
 objects, GameController was modified to include update and draw methods without completely
 implementing Application.
 
 ---Button---
+This class is used for coloured rectangles drawn to the screen, possibly containing text.
+They are used to allow the user to make selections by clicking on them. They change colour
+when moused over, so the user can see whether they are able to click a button, and can be
+set as "pressed" to change their colour, making the current selection visible.
+Buttons are also used for the squares on the Tic Tac Toe board. Those buttons do not contain
+text (with marks being rendered using lines and circles), and are set as pressed to indicate
+an illegal move.
+Buttons are simply part of the user interface and do not directly have any effects. It is the
+responsibility of the GameController class to check whether a button was clicked and perform 
+whatever action is required.
 
+---Game---
+A Game object contains a Tic Tac Toe board as a 3x3 char array, with methods for placing marks
+on the board and checking if the move would end the game. The Game class also has several static
+methods for determining whether a move would be legal, whose turn it is, if someone has won the
+game and so on for a board passed to them.
+This means that other objects are able to check the results of a move for any possible board state,
+without creating any side effects or relying on hidden variables. This is necessary for the AIPlayer's
+MiniMax method, which needs to be able to check all possible moves.
 
 III. Acknowledgements
 ---------------------

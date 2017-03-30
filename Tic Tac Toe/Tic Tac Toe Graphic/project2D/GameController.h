@@ -26,8 +26,8 @@ public:
 	//returns pointer to player using selected mark
 	Player* getPlayer(char mark);
 
-	void Update(float deltaTime);
-	void Draw(aie::Renderer2D & renderer);
+	void update(float deltaTime);
+	void draw(aie::Renderer2D & renderer);
 
 	// Get a move from the user interface
 	Move getMove();
@@ -35,10 +35,10 @@ public:
 	// Displays the current board
 	void displayBoard(aie::Renderer2D & renderer);
 	
-	// Draw game over message
+	// draw game over message
 	void displayGameOver(aie::Renderer2D & renderer);
 
-	// Draw the main menu
+	// draw the main menu
 	void displayMainMenu(aie::Renderer2D &renderer);
 
 	// Tell user interface to display error message

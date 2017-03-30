@@ -35,7 +35,7 @@ void Application2D::update(float deltaTime) {
 	// get input
 	aie::Input* input = aie::Input::getInstance();
 
-	m_gc->Update(deltaTime);
+	m_gc->update(deltaTime);
 	if (!m_gc->IsRunning()) {
 		quit();
 	}
@@ -55,7 +55,7 @@ void Application2D::draw() {
 	// begin drawing sprites
 	m_2dRenderer->begin();
 
-	m_gc->Draw(*m_2dRenderer);
+	m_gc->draw(*m_2dRenderer);
 
 	// done drawing sprites
 	m_2dRenderer->end();
