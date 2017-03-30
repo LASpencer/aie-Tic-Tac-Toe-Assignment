@@ -2,35 +2,15 @@
 #include "Input.h"
 #include "Font.h"
 
-Button::Button() : m_font("./font/consolas.ttf", 32)
+Button::Button() : m_font("./font/consolas.ttf", 32), m_posX(0), m_posY(0),m_height(0),m_width(0),m_pressed(false), m_hover(false),
+m_clicked(false),m_colour(0x00000000),m_hoverColour(0x00000000),m_pressedColour(0x00000000), m_textColour(0x000000FF), m_text("")
 {
-	m_posX = 0;
-	m_posY = 0;
-	m_height = 0;
-	m_width = 0;
-	m_pressed = false;
-	m_hover = false;
-	m_clicked = false;
-	m_colour = 0x00000000;
-	m_hoverColour = 0x00000000;
-	m_pressedColour = 0x00000000;
-	m_textColour = 0x000000FF;
-	strcpy_s(m_text, "");
+	//strcpy_s(m_text, "");
 }
 
-Button::Button(float posX, float posY, float width, float height) : m_font("./font/consolas.ttf", 32)
+Button::Button(float posX, float posY, float width, float height) : m_font("./font/consolas.ttf", 32), m_posX(posX), m_posY(posY), m_height(height), m_width(width), m_pressed(false), m_hover(false),
+m_clicked(false), m_colour(0x00000000), m_hoverColour(0x00000000), m_pressedColour(0x00000000), m_textColour(0x000000FF), m_text("")
 {
-	setPosition(posX,posY);
-	setDimensions(width, height);
-	m_colour = 0x00000000;
-	m_hoverColour = 0x00000000;
-	m_pressedColour = 0x00000000;
-	m_textColour = 0x000000FF;
-	m_pressed = false;
-	m_pressed = false;
-	m_hover = false;
-	m_clicked = false;
-	strcpy_s(m_text, "");
 }
 
 
