@@ -33,12 +33,26 @@ Button			A clickable button
 Game			An object storing a Tic Tac Toe board and methods for playing
 			Tic Tac Toe
 GameController		An object controlling the user interface and game loop
-Player			A virtual class for classes representing players
+Player			A virtual class representing players
     AIPlayer		A player that selects its move with an algorithm
     HumanPlayer		A player given its moves through the user interface
 
 ---Application2D---
+This class is inherited from Bootstrap's Application class. The program's main method 
+creates and runs an Application2D object.
+On startup creates a Renderer2D object (m_2dRenderer) to draw onto, and a GameController
+object (m_gc) which runs the game.
+Each update m_gc's update method is called. Then, if the escape key was 
+pressed, or m_gc's m_running flag is set to false, Application2D quits.
+Similarly its draw method simply clears the screen and calls m_gc's draw method (passing
+a pointer to m_2dRenderer).
+The class mainly exists so that code from the earlier console version of the program 
+could be more easily reused. Rather than completely rewriting GameController as a subclass 
+of Application, or rewriting the other objects which contain pointers to GameController 
+objects, GameController was modified to include update and draw methods without completely
+implementing Application.
 
+---Button---
 
 
 III. Acknowledgements
