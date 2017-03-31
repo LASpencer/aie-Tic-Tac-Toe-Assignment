@@ -94,8 +94,8 @@ void Button::update(float deltaTime)
 {
 	aie::Input* input = aie::Input::getInstance();
 	// Get mouse position
-	float mouseX = input->getMouseX();
-	float mouseY = input->getMouseY();
+	float mouseX = (float)input->getMouseX();
+	float mouseY = (float)input->getMouseY();
 	// Check if mouse on button
 	if (inButton(mouseX, mouseY)) {
 		m_hover = true;

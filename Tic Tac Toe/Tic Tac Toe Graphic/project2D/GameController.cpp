@@ -206,8 +206,8 @@ void GameController::update(float deltaTime)
 				char mark = m_game->getCurrentTurn();
 				if (input->wasMouseButtonPressed(aie::INPUT_MOUSE_BUTTON_LEFT)) {
 					bool buttonClicked = false;
-					for (int i = 0; i < BOARD_SIZE && !buttonClicked; ++i) {
-						for (int j = 0; j < BOARD_SIZE &&!buttonClicked; ++j) {
+					for (size_t i = 0; i < BOARD_SIZE && !buttonClicked; ++i) {
+						for (size_t j = 0; j < BOARD_SIZE &&!buttonClicked; ++j) {
 							if (m_boardButton[i][j]->wasClicked()) {
 								buttonClicked = true;
 								Move playerMove = { i, j };
@@ -508,7 +508,7 @@ void GameController::initButtons()
 	// Board buttons
 	for (int i = 0; i < BOARD_SIZE; ++i) {
 		for (int j = 0; j < BOARD_SIZE; ++j) {
-			m_boardButton[i][j] = new Button(245 +(j*200), 595-(i*200), 190, 190);
+			m_boardButton[i][j] = new Button(245 +((float)j*200), 595-((float)i*200), 190, 190);
 			m_boardButton[i][j]->setColour(BOARD_COLOUR);
 			m_boardButton[i][j]->setHoverColour(BOARD_HOVER_COLOUR);
 			m_boardButton[i][j]->setPressedColour(BOARD_WARNING_COLOUR);
@@ -516,7 +516,7 @@ void GameController::initButtons()
 	}
 	// Buttons to select xPlayer type
 	for (int i = 0; i < 4; i++) {
-		m_xPlayerMenuButton[i] = new Button(240, 200 - (i * 50), 220, 50);
+		m_xPlayerMenuButton[i] = new Button(240, 200 - ((float)i * 50), 220, 50);
 		m_xPlayerMenuButton[i]->setColour(SELECT_PLAYER_BUTTON_COLOUR);
 		m_xPlayerMenuButton[i]->setHoverColour(SELECT_PLAYER_HOVER_BUTTON_COLOUR);
 		m_xPlayerMenuButton[i]->setPressedColour(SELECT_PLAYER_PRESSED_BUTTON_COLOUR);
@@ -541,7 +541,7 @@ void GameController::initButtons()
 
 	// Buttons to select oPlayer type
 	for (int i = 0; i < 4; i++) {
-		m_oPlayerMenuButton[i] = new Button(720, 200 - (i * 50), 220, 50);
+		m_oPlayerMenuButton[i] = new Button(720, 200 - ((float)i * 50), 220, 50);
 		m_oPlayerMenuButton[i]->setColour(SELECT_PLAYER_BUTTON_COLOUR);
 		m_oPlayerMenuButton[i]->setHoverColour(SELECT_PLAYER_HOVER_BUTTON_COLOUR);
 		m_oPlayerMenuButton[i]->setPressedColour(SELECT_PLAYER_PRESSED_BUTTON_COLOUR);
