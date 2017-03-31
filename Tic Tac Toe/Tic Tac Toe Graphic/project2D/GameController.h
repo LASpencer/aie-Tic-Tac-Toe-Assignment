@@ -20,7 +20,9 @@ public:
 	void setXPlayer(Player *theXPlayer);
 	void setOPlayer(Player *theOPlayer); 
 
+	// Creates new Player object pointed to by m_xPlayer
 	void setXPlayer(char playerType);
+	// Creates new Player object pointed to by m_oPlayer
 	void setOPlayer(char playerType);
 
 	//returns pointer to player using selected mark
@@ -29,7 +31,7 @@ public:
 	void update(float deltaTime);
 	void draw(aie::Renderer2D & renderer);
 
-	// Get a move from the user interface
+	// Returns move from last board square clicked
 	Move getMove();
 	
 	// Displays the current board
@@ -41,51 +43,19 @@ public:
 	// draw the main menu
 	void displayMainMenu(aie::Renderer2D &renderer);
 
-	// Tell user interface to display error message
-	void WarnIllegal(Move move);
+	// Makes relevant board square flash red and plays a beep
+	void warnIllegal(Move move);
 
 
 	// Request type of player to change chosen player
-	void ChangePlayer(char mark, char playerType);
+	void changePlayer(char mark, char playerType);
 
+	// Returns type of player with selected mark
 	char getPlayerType(char mark);
 
-
-	//// Play a game of tic-tac-toe, taking turns until game is over
-	//void playGame();
-
-	bool IsRunning() {
+	bool isRunning() {
 		return m_running;
-	}
-
-	static const char NO_COMMAND = 0;
-	static const char START_GAME = 1;
-	static const char CHANGE_X_PLAYER = 2;
-	static const char CHANGE_O_PLAYER = 3;
-	static const char QUIT = 4;
-
-	static const unsigned int BOARD_COLOUR = 0x0000FFFF;
-	static const unsigned int BOARD_HOVER_COLOUR = 0x0044FFFF;
-	static const unsigned int BOARD_WARNING_COLOUR = 0xFF0000FF;
-	static const unsigned int SELECT_PLAYER_BUTTON_COLOUR = 0xFF0000FF;
-	static const unsigned int SELECT_PLAYER_HOVER_BUTTON_COLOUR = 0xFF2222FF;
-	static const unsigned int SELECT_PLAYER_PRESSED_BUTTON_COLOUR = 0xFFFF00FF;
-	static const unsigned int MARK_COLOUR = 0x000000FF;
-	static const unsigned int BACKGROUND_COLOUR = 0x000000FF;
-	static const unsigned int WIN_LINE_COLOUR = 0xBBBBBBFF;
-	static const unsigned int PLAY_BUTTON_COLOUR = 0x00FF00FF;
-	static const unsigned int PLAY_HOVER_BUTTON__COLOUR = 0x22FF22FF;
-	static const unsigned int QUIT_BUTTON_COLOUR = 0xFF8800FF;
-	static const unsigned int QUIT_HOVER_BUTTON_COLOUR = 0xFFAA22FF;
-	static const unsigned int MENU_BUTTON_COLOUR = 0xFFFF00FF;
-	static const unsigned int MENU_HOVER_BUTTON_COLOUR = 0xFFFF22FF;
-	static const unsigned int TEXT_COLOUR = 0xBBBBBBFF;
-
-	static const float MARK_THICKNESS;
-	static const float MARK_MARGIN;
-
-	static const char SELECT_PLAYER_TEXT[4][16];
-	
+	}	
 
 private:
 	UserInterface *m_ui;

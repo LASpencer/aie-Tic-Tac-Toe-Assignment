@@ -36,7 +36,7 @@ void Application2D::update(float deltaTime) {
 	aie::Input* input = aie::Input::getInstance();
 
 	m_gc->update(deltaTime);
-	if (!m_gc->IsRunning()) {
+	if (!m_gc->isRunning()) {
 		quit();
 	}
 	// exit the application

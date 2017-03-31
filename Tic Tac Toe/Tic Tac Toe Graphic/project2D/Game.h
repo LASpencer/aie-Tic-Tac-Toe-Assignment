@@ -61,6 +61,7 @@ public:
 	// Copies m_gameBoard to target board
 	void copyGameBoard(board target);
 
+	// Copies source board to target board
 	static void copyBoard(board target, const board & source);
 
 	// Checks if m_gameOver member is set true

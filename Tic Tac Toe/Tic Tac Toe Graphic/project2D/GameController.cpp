@@ -7,12 +7,30 @@
 #include "Input.h"
 #include "Texture.h"
 
-const char GameController::SELECT_PLAYER_TEXT[4][16] = {
+const unsigned int BOARD_COLOUR = 0x0000FFFF;
+const unsigned int BOARD_HOVER_COLOUR = 0x0044FFFF;
+const unsigned int BOARD_WARNING_COLOUR = 0xFF0000FF;
+const unsigned int SELECT_PLAYER_BUTTON_COLOUR = 0xFF0000FF;
+const unsigned int SELECT_PLAYER_HOVER_BUTTON_COLOUR = 0xFF2222FF;
+const unsigned int SELECT_PLAYER_PRESSED_BUTTON_COLOUR = 0xFFFF00FF;
+const unsigned int MARK_COLOUR = 0x000000FF;
+const unsigned int BACKGROUND_COLOUR = 0x000000FF;
+const unsigned int WIN_LINE_COLOUR = 0xBBBBBBFF;
+const unsigned int PLAY_BUTTON_COLOUR = 0x00FF00FF;
+const unsigned int PLAY_HOVER_BUTTON__COLOUR = 0x22FF22FF;
+const unsigned int QUIT_BUTTON_COLOUR = 0xFF8800FF;
+const unsigned int QUIT_HOVER_BUTTON_COLOUR = 0xFFAA22FF;
+const unsigned int MENU_BUTTON_COLOUR = 0xFFFF00FF;
+const unsigned int MENU_HOVER_BUTTON_COLOUR = 0xFFFF22FF;
+const unsigned int TEXT_COLOUR = 0xBBBBBBFF;
+
+
+const char SELECT_PLAYER_TEXT[4][16] = {
 	"Human Player","Easy AI","Medium AI","Hard AI"
 };
 
-const float GameController::MARK_THICKNESS = 8.0f;
-const float GameController::MARK_MARGIN = 5.0f;
+const float MARK_THICKNESS = 8.0f;
+const float MARK_MARGIN = 5.0f;
 
 GameController::GameController() : m_font("./font/consolas.ttf", 64)	//TODO put into initializer lest where possible
 {
@@ -128,20 +146,26 @@ void GameController::update(float deltaTime)
 {
 	aie::Input* input = aie::Input::getInstance();
 
+	// If currently in a game
 	if (m_inGame) {
+		// If game has ended
 		if (m_game->isGameOver()) {
+			// Update Game Over buttons
 			m_playGameOverButton->update(deltaTime);
 			m_menuGameOverButton->update(deltaTime);
 			m_quitGameOverButton->update(deltaTime);
-			// check for replay or quit button clicks
+			// Check if buttons were clicked
 			if (input->wasMouseButtonPressed(aie::INPUT_MOUSE_BUTTON_LEFT)) {
 				if (m_playGameOverButton->wasClicked()) {
+					// Start a new game
 					m_game->initialize();
 				}
 				else if(m_menuGameOverButton->wasClicked()) {
+					// No longer in a game, return to main menu
 					m_inGame = false;
 				}
 				else if (m_quitGameOverButton->wasClicked()) {
+					// Close program
 					m_running = false;
 				}
 			}
@@ -160,6 +184,7 @@ void GameController::update(float deltaTime)
 			// If human player's turn
 			if (playerType == Player::PLAYER_HUMAN) {
 				// update board buttons
+				// TODO place this outside if block (test if not buggy)
 				for (int i = 0; i < BOARD_SIZE; ++i) {
 					for (int j = 0; j < BOARD_SIZE; ++j) {
 						m_boardButton[i][j]->update(deltaTime);
@@ -446,12 +471,12 @@ void GameController::displayMainMenu(aie::Renderer2D & renderer)
 	m_quitButton->draw(renderer);
 }
 
-void GameController::WarnIllegal(Move move)
+void GameController::warnIllegal(Move move)
 {
 	// Play noise and set background of square to red for a short time
 }
 
-void GameController::ChangePlayer(char mark, char playerType)
+void GameController::changePlayer(char mark, char playerType)
 {
 	switch (mark) {
 	case 'x':

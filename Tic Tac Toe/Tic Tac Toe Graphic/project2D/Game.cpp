@@ -39,7 +39,6 @@ void Game::takeTurn() {
 void Game::takeTurn(char mark) 
 {
 	Move theMove;
-	bool legalMove = false;
 	Player * activePlayer;
 	Player * passivePlayer;
 	switch (mark) {										// set player pointers based on whose turn it is
@@ -55,12 +54,9 @@ void Game::takeTurn(char mark)
 		throw std::invalid_argument("Received mark other than 'x' or 'o'");	
 		break;
 	}
-	while (!legalMove) {								// Ask for move from player until legal
-		theMove = activePlayer->GetMove(m_gameBoard);		
-		legalMove = isMoveLegal(theMove, mark, m_gameBoard);
-		if (!legalMove) {
-			// TODO throw exception?
-		}
+	theMove = activePlayer->GetMove(m_gameBoard);
+	if (!isMoveLegal(theMove, mark, m_gameBoard)) {	
+		throw std::logic_error("Illegal move");
 	}
 	m_gameBoard[theMove.row][theMove.col] = mark;			// Put mark on the game board
 	if (hasWon(mark, m_gameBoard)) {						// Check if active player won
@@ -83,23 +79,23 @@ bool Game::hasWon(char mark, board theBoard)
 	bool row = false;
 	bool col = false;
 	bool diagonal = false;
-	for (int i = 0; i < BOARD_SIZE; i++) {													// check each row
-		row = true;
+	for (int i = 0; i < BOARD_SIZE; i++) {						// check each row
+		row = true;												// start by assuming row will win
 		for (int j = 0; j < BOARD_SIZE; j++) {
-			if (theBoard[i][j] != mark) {
-				row = false;
-				break;
+			if (theBoard[i][j] != mark) {						// if any square on row isn't the mark
+				row = false;									// row won't win
+				break;											// stop checking this row
 			}
 		}
 		if (row) {
-			break;
+			break;												// If a row has won, no need to check further
 		}
 	}
 	if (!row) {
-		for (int i = 0; i < BOARD_SIZE; i++) {												// check each column	
-			col = true;
+		for (int i = 0; i < BOARD_SIZE; i++) {					// check each column	
+			col = true;											// Same logic as for row
 			for (int j = 0; j < BOARD_SIZE; j++) {
-				if (theBoard[j][i] != mark) {
+				if (theBoard[j][i] != mark) {					// Except swap indices being iterated over
 					col = false;
 					break;
 				}
@@ -109,36 +105,35 @@ bool Game::hasWon(char mark, board theBoard)
 			}
 		}
 	}
-	if (!row && !col) {																				// check diagonals
-		diagonal = true;
-		for (int i = 0; i < BOARD_SIZE; i++) {
-			if (theBoard[i][i] != mark) {
-				diagonal = false;
+	if (!row && !col) {											// check diagonals
+		diagonal = true;										// Assume diagonal will win
+		for (int i = 0; i < BOARD_SIZE; i++) {	
+			if (theBoard[i][i] != mark) {						// Check top left to bottom right
+				diagonal = false;								// If any square is not the mark, stop checking this diagonal
 				break;
 			}
 		}
-		if (!diagonal) {
-			diagonal = true;
+		if (!diagonal) {										// If that diagonal didn't win
+			diagonal = true;									// Same as above			
 			for (int i = 0; i < BOARD_SIZE; i++) {
-				if (theBoard[i][(BOARD_SIZE-1) - i] != mark) {
+				if (theBoard[i][(BOARD_SIZE-1) - i] != mark) {	// Except check top right to bottom left
 					diagonal = false;
 					break;
 				}
 			}
 		}
 	}
-	return (row||col||diagonal);
+	return (row||col||diagonal);								// If any of these stayed true, return true
 }
 
-// Returns true if all spaces on board are marked 
 bool Game::isFull(board theBoard)
 {
-	bool full = true;
+	bool full = true;												// Assume board is full
 	for (int i = 0; i < BOARD_SIZE; i++) {
 		for (int j = 0; j < BOARD_SIZE; j++) {
-			if (theBoard[i][j] != 'x' && theBoard[i][j] != 'o') {
-				full = false;
-				break;
+			if (theBoard[i][j] != 'x' && theBoard[i][j] != 'o') {	// If any square doesn't have a mark in it
+				full = false;										// Board is not full
+				break;												// Stop checking
 			}
 		}
 		if (!full) {
@@ -148,9 +143,7 @@ bool Game::isFull(board theBoard)
 	return full;
 }
 
-/*	counts x and o marks on board
-returns x if values equal, o if one more x, or error code if board isn't suitable
-*/
+
 char Game::findCurrentTurn(const board &theBoard)
 {
 	int xCount = 0;
@@ -242,7 +235,7 @@ bool Game::getWinningLine(Move winningLine[2], board theBoard)
 	bool col = false;
 	bool diagonal = false;
 	char mark;
-	for (size_t i = 0; i < BOARD_SIZE; i++) {													// check each row
+	for (size_t i = 0; i < BOARD_SIZE; i++) {					// check each row
 		row = true;
 		mark = theBoard[i][0];
 		for (size_t j = 1; j < BOARD_SIZE; j++) {
@@ -251,14 +244,14 @@ bool Game::getWinningLine(Move winningLine[2], board theBoard)
 				break;
 			}
 		}
-		if (row) {
-			winningLine[0] = { i,0 };
-			winningLine[1] = { i,2 };
+		if (row) {												// If row wins
+			winningLine[0] = { i,0 };							// Line is from start of row
+			winningLine[1] = { i,2 };							// to end of row
 			break;
 		}
 	}
 	if (!row) {
-		for (size_t i = 0; i < BOARD_SIZE; i++) {												// check each column	
+		for (size_t i = 0; i < BOARD_SIZE; i++) {				// check each column	
 			col = true;
 			mark = theBoard[0][i];
 			for (size_t j = 1; j < BOARD_SIZE; j++) {
@@ -267,14 +260,14 @@ bool Game::getWinningLine(Move winningLine[2], board theBoard)
 					break;
 				}
 			}
-			if (col) {
-				winningLine[0] = { 0,i };
+			if (col) {											// If column wins
+				winningLine[0] = { 0,i };						// Line from start of column to end of column
 				winningLine[1] = { 2,i };
 				break;
 			}
 		}
 	}
-	if (!row && !col) {																				// check diagonals
+	if (!row && !col) {															// check diagonals
 		mark = theBoard[1][1];
 		if (theBoard[0][0] == mark && theBoard[2][2] == mark) {
 			diagonal = true;
