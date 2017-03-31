@@ -105,7 +105,31 @@ with the new move made on it. The value of this move is equal to the value in th
 with its absolute value reduced by 1 and with opposite sign. This means that letting the other player win is 
 bad, and forcing your own win is good. Also, by reducing the value by 1, the number of turns until someone wins
 is taken into account, so winning quickly or putting off a defeat will be prefered.
-The moves are put into an array of MinimaxOptions, sorted by value and width. Width is 
+The moves are put into an array of MinimaxOptions, sorted by value and width. Lower width is better, as it means
+the other player has more possible worse moves they can make. That is, they have more chances to make a mistake.
+A random MinimaxOption is selected from those with highest value and lowest width, and has its width set to the
+number of other MinimaxOptions with equal value.
+
+There are two other features of the minimax method. First: alpha-beta pruning. As a recursive method, minimax can
+be expensive in both time and memory, especially for the early moves. Alpha-beta pruning reduces this cost by 
+ignoring possible moves that won't affect the final decision. As only the best move will be passed on, if the 
+current best move is good enough that when returned it will make this branch a worse option than the current best
+move in the calling method, no other moves need to be evaluated. So, after the first move is evaluated, whenever 
+minimax is called it is passed a valueToBeat argument equal to the current best move's value. In the called method,
+whenever a new best move is found, its value after being returned is compared to the valueToBeat, and if lower the 
+method will stop evaluating other moves. Implementing Alpha-beta pruning reduced the time required to calculate
+the first move from 530ms to 180ms and the second move from 73ms to 17ms in Debug mode.
+
+Second: depth. A perfect AI is not fun to play against, so it is useful to make an AI opponent capable of making 
+mistakes. This is done by limiting how many turns the AI will look ahead. Each AIPlayer object has their depth set,
+which it passes to the minimax method when called. Every time the minimax method calls itself, the depth passed is
+reduced by 1, and when depth is 0, instead of calling itself it will treat the value as 0. 
+There are 3 possible difficulty levels, based on their depth. Easy difficulty has depth 1, which lets it look one 
+turn ahead to check if the other player is able to win. Medium difficulty has depth 3. By looking ahead 3 turns it 
+can notice forks (situations where a player threatens victory in two places) for both itself and the other player, 
+then try to create or block them. Hard difficulty has depth 8, checking every possible move. This means it plays 
+perfectly and so can't be defeated.
+
 
 2: HumanPlayer
 The HumanPlayer subclass is far less complex. It gets its move by calling the GameController's getMove method,

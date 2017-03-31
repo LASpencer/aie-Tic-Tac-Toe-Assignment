@@ -4,13 +4,9 @@
 
 bool operator<(const MinimaxOption& a, const MinimaxOption& b) {
 	bool result;
-	if(a.value == b.value){					// If values equal, compare width
-		if (a.value > 0) {					
-			result = a.width < b.width;		// If value positive or 0, higher width is better (more ways to force win)
-		}
-		else {
-			result = a.width > b.width;		// If value negative or 0, lower width is better (less ways to lose or force draw)
-		}
+	if(a.value == b.value){					// If values equal, compare width			
+			result = a.width > b.width;		// Lower width is better (less ways to make a better move)
+
 	}	else {
 		result = a.value < b.value;			// If values not equal, compare values
 	}
@@ -20,12 +16,7 @@ bool operator<(const MinimaxOption& a, const MinimaxOption& b) {
 bool operator>(const MinimaxOption& a, const MinimaxOption& b) {
 	bool result;
 	if (a.value == b.value) {					// If values equal, compare width
-		if (a.value > 0) {					
-			result = a.width > b.width;		// If value positive or 0, higher width is better (more ways to win or draw)
-		}
-		else {
-			result = a.width < b.width;		// If value negative, lower width is better (less ways to lose)
-		}
+			result = a.width < b.width;		// If value negative, lower width is better (less ways to make a better move)
 	}
 	else {
 		result = a.value > b.value;			// If values not equal, compare values
