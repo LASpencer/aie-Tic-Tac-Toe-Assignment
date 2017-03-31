@@ -8,6 +8,6 @@ public:
 	~HumanPlayer();
 
 	// Tell GameController to prompt user for a move
-	Move GetMove(const board &theBoard);
+	Move getMove(const board &theBoard);
 };
 

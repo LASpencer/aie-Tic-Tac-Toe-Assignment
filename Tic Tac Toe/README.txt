@@ -88,7 +88,28 @@ representing a legal move the game takes a turn.
 On an AI player's turn, it waits for a short time before the game takes a turn.
 
 ---Player---
+The Player virtual class represents a player in the game.
+It contains two methods: setGameController to set a pointer to the GameController object, and getMove to allow
+the Game object to get that player's chosen move.
 
+1: AIPlayer
+The AIPlayer's move is determined by using a minimax algorithm (more specifically, a negamax algorithm using 
+alpha-beta pruning). 
+The minimax method returns a MinimaxOption struct. This struct contains a move, the move's value, and the move's
+width (how many other moves with the same value could also have been made). The move from this structure is 
+returned by getMove.
+The minimax method checks every possible legal move on the board passed to it, creating a copy of that board
+with the possible move made on it and checking the result. If it's a winning move, it's assigned a value of 10.
+If it ends the game with a draw, 0. If the game still continues, the method calls itself, passing the board 
+with the new move made on it. The value of this move is equal to the value in the MinimaxOption struct returned, 
+with its absolute value reduced by 1 and with opposite sign. This means that letting the other player win is 
+bad, and forcing your own win is good. Also, by reducing the value by 1, the number of turns until someone wins
+is taken into account, so winning quickly or putting off a defeat will be prefered.
+The moves are put into an array of MinimaxOptions, sorted by value and width. Width is 
+
+2: HumanPlayer
+The HumanPlayer subclass is far less complex. It gets its move by calling the GameController's getMove method,
+returning the last legal move clicked on by a user.
 
 III. Acknowledgements
 ---------------------

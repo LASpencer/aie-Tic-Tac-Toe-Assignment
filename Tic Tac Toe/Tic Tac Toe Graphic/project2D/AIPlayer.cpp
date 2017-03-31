@@ -63,14 +63,14 @@ AIPlayer::~AIPlayer()
 {
 }
 
-Move AIPlayer::GetMove(const board &theBoard) {
-	// Get best MinimaxOption from Minimax function
-	MinimaxOption moveChoice = Minimax(theBoard,m_depth);
+Move AIPlayer::getMove(const board &theBoard) {
+	// Get best MinimaxOption from minimax function
+	MinimaxOption moveChoice = minimax(theBoard,m_depth);
 	// Return move from moveChoice
 	return moveChoice.move;
 }
 
-MinimaxOption AIPlayer::Minimax(const board & theBoard, int depth, int valueToBeat ) 
+MinimaxOption AIPlayer::minimax(const board & theBoard, int depth, int valueToBeat ) 
 {
 	MinimaxOption *optionList = new MinimaxOption[BOARD_SIZE*BOARD_SIZE];	//Holds all possible options
 	MinimaxOption nextMove;
@@ -95,14 +95,14 @@ MinimaxOption AIPlayer::Minimax(const board & theBoard, int depth, int valueToBe
 				else if (depth <= 0) {
 					temp = { { i,j },0,1 };							// If reached end of depth, add to list with value 0
 				}
-				else {												// Call Minimax for opponent's move with depth decreased
+				else {												// Call minimax for opponent's move with depth decreased
 					if (optionCount == 0) {
-						nextMove = Minimax(testBoard, depth - 1);
+						nextMove = minimax(testBoard, depth - 1);
 					}
 					else {
-						nextMove = Minimax(testBoard, depth - 1, optionList[0].value);	// If any options have been checked, pass best option's value as valueToBeat
+						nextMove = minimax(testBoard, depth - 1, optionList[0].value);	// If any options have been checked, pass best option's value as valueToBeat
 					}
-					value = ReverseMinimaxValue(nextMove.value);	// Value of this move is opposite of opponent's best move's value
+					value = reverseMinimaxValue(nextMove.value);	// Value of this move is opposite of opponent's best move's value
 					temp = { { i,j }, value, nextMove.width };
 				}
 			// Insert into optionList, ordered from best to worst move
@@ -114,7 +114,7 @@ MinimaxOption AIPlayer::Minimax(const board & theBoard, int depth, int valueToBe
 			optionList[n] = temp;
 			++optionCount;
 			if (n == 0) {														// If this is new best move
-				if (ReverseMinimaxValue(optionList[0].value) < valueToBeat) {	// If best move, on being returned, will be a worse move than the best move of parent
+				if (reverseMinimaxValue(optionList[0].value) < valueToBeat) {	// If best move, on being returned, will be a worse move than the best move of parent
 					pruneSubtrees = true;										// Stop considering moves, as other player wouldn't let this happen
 					break;
 				}
@@ -125,9 +125,9 @@ MinimaxOption AIPlayer::Minimax(const board & theBoard, int depth, int valueToBe
 			break;
 		}
 	}
-	// Figure out how many moves are equal best
-	int width = 1;
-	int equivalentOptions = 1;
+	// Figure out how many moves are equally good
+	int width = 1;					// Moves of equal value
+	int equivalentOptions = 1;		// Moves of equal value and width
 	while (width < BOARD_SIZE*BOARD_SIZE && optionList[0].value == optionList[width].value){
 		if (optionList[0].width == optionList[width].width) {
 			++equivalentOptions;
@@ -140,7 +140,7 @@ MinimaxOption AIPlayer::Minimax(const board & theBoard, int depth, int valueToBe
 	return bestMove;
 }
 
-int AIPlayer::ReverseMinimaxValue(int value) {
+int AIPlayer::reverseMinimaxValue(int value) {
 	int reverseValue;
 	
 	if (value == 0) {
@@ -155,7 +155,7 @@ int AIPlayer::ReverseMinimaxValue(int value) {
 	return reverseValue;
 }
 
-MinimaxOption AIPlayer::Minimax(const board & theBoard)
+MinimaxOption AIPlayer::minimax(const board & theBoard)
 {
-	return Minimax(theBoard, m_depth);
+	return minimax(theBoard, m_depth);
 }

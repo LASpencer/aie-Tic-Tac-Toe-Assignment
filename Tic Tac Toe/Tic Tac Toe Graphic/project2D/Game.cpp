@@ -54,7 +54,7 @@ void Game::takeTurn(char mark)
 		throw std::invalid_argument("Received mark other than 'x' or 'o'");	
 		break;
 	}
-	theMove = activePlayer->GetMove(m_gameBoard);
+	theMove = activePlayer->getMove(m_gameBoard);
 	if (!isMoveLegal(theMove, mark, m_gameBoard)) {	
 		throw std::logic_error("Illegal move");
 	}

@@ -13,8 +13,8 @@ public:
 	~Player();
 
 	// Decide what move to make based on board given
-	virtual Move GetMove(const board &theBoard) = 0;
-	void setGameController(GameController *gameController); //TODO should probably be in constructor
+	virtual Move getMove(const board &theBoard) = 0;
+	void setGameController(GameController *gameController);
 
 
 	/*	Player type codes

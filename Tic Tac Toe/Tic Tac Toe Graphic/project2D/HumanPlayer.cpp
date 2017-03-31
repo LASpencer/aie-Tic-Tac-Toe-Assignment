@@ -11,7 +11,7 @@ HumanPlayer::~HumanPlayer()
 {
 }
 
-Move HumanPlayer::GetMove(const board & theBoard)
+Move HumanPlayer::getMove(const board & theBoard)
 {
 
 	return m_gc->getMove();
