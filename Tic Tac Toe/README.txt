@@ -74,6 +74,22 @@ This means that other objects are able to check the results of a move for any po
 without creating any side effects or relying on hidden variables. This is necessary for the AIPlayer's
 MiniMax method, which needs to be able to check all possible moves.
 
+---GameController---
+The GameController object creates all the other game objects and calls their methods based on the player's
+input. 
+Every update and draw, it checks whether a game is being played, and if so whether the game has been ended.
+When drawing, it draws the relevant objects and any other graphic elements needed.
+When updating, it checks the relevant objects and take approprate action based on user input.
+If outside a game, or when the game is over, this is fairly straightforward. Each button drawn to the screen
+is checked to see if it was clicked, and if so some code will be executed.
+During a game, its behaviour depends on whether a human or AI is going to take a turn.
+On a human player's turn, it checks the buttons drawn for the game board, and if the player clicked a button
+representing a legal move the game takes a turn.
+On an AI player's turn, it waits for a short time before the game takes a turn.
+
+---Player---
+
+
 III. Acknowledgements
 ---------------------
 

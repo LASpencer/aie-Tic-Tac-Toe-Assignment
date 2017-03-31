@@ -181,26 +181,25 @@ void GameController::update(float deltaTime)
 				playerType = m_oPlayerType;
 				break;
 			}
-			// If human player's turn
-			if (playerType == Player::PLAYER_HUMAN) {
-				// update board buttons
-				// TODO place this outside if block (test if not buggy)
+			// update board buttons
+			for (int i = 0; i < BOARD_SIZE; ++i) {
+				for (int j = 0; j < BOARD_SIZE; ++j) {
+					m_boardButton[i][j]->update(deltaTime);
+				}
+			}
+			// Remove illegal move warning after time
+			m_warningTimer += deltaTime;
+			if (m_warningTimer > 0.2) {
 				for (int i = 0; i < BOARD_SIZE; ++i) {
 					for (int j = 0; j < BOARD_SIZE; ++j) {
-						m_boardButton[i][j]->update(deltaTime);
-					}
-				}
-				// Remove illegal move warning after time
-				m_warningTimer += deltaTime;
-				if (m_warningTimer > 0.2) {
-					for (int i = 0; i < BOARD_SIZE; ++i) {
-						for (int j = 0; j < BOARD_SIZE; ++j) {
-							if (m_boardButton[i][j]->isPressed()) {
-								m_boardButton[i][j]->setPressed(false);
-							}
+						if (m_boardButton[i][j]->isPressed()) {
+							m_boardButton[i][j]->setPressed(false);
 						}
 					}
 				}
+			}
+			// If human player's turn
+			if (playerType == Player::PLAYER_HUMAN) {
 				// Check if player clicked square
 				board gameBoard;
 				m_game->copyGameBoard(gameBoard);
