@@ -2,7 +2,6 @@
 #include "Game.h"
 #include "Player.h"
 #include "GameController.h"
-#include <stdexcept>
 
 Game::Game(GameController *gc)
 {
@@ -50,26 +49,23 @@ void Game::takeTurn(char mark)
 		activePlayer = m_gc->getPlayer('o');
 		passivePlayer = m_gc->getPlayer('x');
 		break;
-	default:
-		throw std::invalid_argument("Received mark other than 'x' or 'o'");	
-		break;
 	}
 	theMove = activePlayer->getMove(m_gameBoard);
-	if (!isMoveLegal(theMove, mark, m_gameBoard)) {	
-		throw std::logic_error("Illegal move");
-	}
-	m_gameBoard[theMove.row][theMove.col] = mark;			// Put mark on the game board
-	if (hasWon(mark, m_gameBoard)) {						// Check if active player won
-		if (mark == 'x') {
-			m_gameStatus = STATUS_X_WIN;
-		} else{
-			m_gameStatus = STATUS_O_WIN;
+	if (isMoveLegal(theMove, mark, m_gameBoard)) {
+		m_gameBoard[theMove.row][theMove.col] = mark;			// Put mark on the game board
+		if (hasWon(mark, m_gameBoard)) {						// Check if active player won
+			if (mark == 'x') {
+				m_gameStatus = STATUS_X_WIN;
+			}
+			else {
+				m_gameStatus = STATUS_O_WIN;
+			}
+			m_gameOver = true;
 		}
-		m_gameOver = true;
-	}
-	else if (isFull(m_gameBoard)) {						// Check if board is full
-		m_gameStatus = STATUS_DRAW;
-		m_gameOver = true;
+		else if (isFull(m_gameBoard)) {						// Check if board is full
+			m_gameStatus = STATUS_DRAW;
+			m_gameOver = true;
+		}
 	}
 }
 
@@ -198,9 +194,6 @@ bool Game::isMoveLegal(Move theMove, char mark,const board &theBoard) {
 		currentTurn = findCurrentTurn(theBoard);
 		if (currentTurn != mark) {						// Either played out of turn, or an error code
 			legal = false;
-			if (currentTurn == ERROR_ILLEGAL_BOARD) {
-				throw std::invalid_argument("Illegal board passed to function");
-			}
 		}
 	}
 	return legal;
