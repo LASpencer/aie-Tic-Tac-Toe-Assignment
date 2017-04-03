@@ -119,7 +119,7 @@ MinimaxOption AIPlayer::minimax(const board & theBoard, int depth, int valueToBe
 	// Figure out how many moves are equally good
 	int width = 1;					// Moves of equal value
 	int equivalentOptions = 1;		// Moves of equal value and width
-	while (width < BOARD_SIZE*BOARD_SIZE && optionList[0].value == optionList[width].value){
+	while (width < optionCount && optionList[0].value == optionList[width].value){
 		if (optionList[0].width == optionList[width].width) {
 			++equivalentOptions;
 		}
